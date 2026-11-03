@@ -2,12 +2,14 @@
 // Tudo aqui usa o que vocês já viram: variáveis, prompt, if / else, while e vetor.
 // Só uma coisa é nova: Math.random(), que sorteia um número entre 0 e 1.
 const prompt = require("prompt-sync")();
-const heroi = require("./heroi")
+const heroi = require("./heroi");
+const vila = require("./regioes/vila");
+const sorte = require("./sistemas/sorte")
 
 // ===== CONTROLE DO JOGO =====
 let local = "vila";        // onde o herói está agora
 let jogando = true;        // o jogo continua enquanto for true
-const TESTE = false;       // true = a sorte fica fixa, para o roteiro de teste
+       // true = a sorte fica fixa, para o roteiro de teste
 
 // ===== HERÓI =====
 heroi.nome = prompt("Qual é o nome do seu herói? ");
@@ -27,26 +29,12 @@ while (jogando) {
     console.log("Você caiu no caminho. Fim de jogo.");
     jogando = false;
   } else if (local === "vila") {
-    console.log("");
-    console.log("[VILA] Um velho pescador te entrega uma moeda furada: 'Não vale nada. Guarde mesmo assim.'");
-    if (heroi.inventario.includes("moeda furada") === false && heroi.inventario.includes("corda") === false) {
-      heroi.inventario.push("moeda furada");
-    }
-    console.log("1 - ir para a floresta   2 - ir para o poço");
-    let escolha = prompt("> ");
-    if (escolha === "1") {
-      local = "floresta";
-    } else if (escolha === "2") {
-      local = "poco";
-    }
+    local = vila
   } else if (local === "floresta") {
     console.log("");
     console.log("[FLORESTA] Galhos fechados. Algo se mexe no chão.");
-    let sorte = Math.random();
-    if (TESTE) {
-      sorte = 0.2;
-    }
-    if (sorte < 0.4) {
+
+    if (sorte(0.4)) {
       console.log("Uma aranha te morde! Você está envenenado por 3 passos.");
       heroi.veneno = 3;
     } else {
